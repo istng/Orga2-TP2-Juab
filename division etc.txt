@@ -1,0 +1,16 @@
+convert:
+1)Macros.
+2)Loop unrolling.
+3)Instrucción phadd.
+
+fourcombine:
+1)Cambiar como tomar pixeles.
+2)Loop unrolling.
+
+zoom:
+1)Acceder con movdqa.
+2)Recorrer 3 veces la imagen.
+
+max closer:
+1) Recorrer hasta linea cache.
+2) Recorrer alrevez la matriz.
