@@ -109,21 +109,29 @@ int main(int argc __attribute__((unused)), char* argv[]){
 
     //LINEAR ZOOM
     else if(strcmp(FUNCION, "C_linearZoom") == 0){
+      free(dataDst);
+      dataDst = malloc(sizeof(uint8_t)*4*h*w*4);
       RDTSC_START(start);
       C_linearZoom(dataSrc,w,h,dataDst,w,h);
       RDTSC_STOP(end);
     }
     else if(strcmp(FUNCION, "ASM_linearZoom") == 0){
+      free(dataDst);
+      dataDst = malloc(sizeof(uint8_t)*4*h*w*4);
       RDTSC_START(start);
       ASM_linearZoom(dataSrc,w,h,dataDst,w,h);
       RDTSC_STOP(end);
     }
     else if(strcmp(FUNCION, "ASM_linearZoom_tres_pasadas") == 0){
+      free(dataDst);
+      dataDst = malloc(sizeof(uint8_t)*4*h*w*4);
       RDTSC_START(start);
       ASM_linearZoom_tres_pasadas(dataSrc,w,h,dataDst,w,h);
       RDTSC_STOP(end);
     }
     else if(strcmp(FUNCION, "ASM_linearZoom_mem_alineada") == 0){
+      free(dataDst);
+      dataDst = malloc(sizeof(uint8_t)*4*h*w*4);
       RDTSC_START(start);
       ASM_linearZoom_mem_alineada(dataSrc,w,h,dataDst,w,h);
       RDTSC_STOP(end);
