@@ -35,7 +35,7 @@ for dirTXT in os.listdir(imagenes):
 
 		#creo la tupla donde van a ir los tres valores: [DIM, PROM, DESV]
 		nuevo = []
-		nuevo.append(dimTXT[-17:-8]) #esto guarda cachos que no son dimensión, habría que afinarlo un poco
+		nuevo.append(dimTXT) #esto guarda todo el nombre del archivo con su dimensión y su "colores" o lena", habria que cambiarlo...
 		nuevo.append(promLine)
 		nuevo.append(desvLine)
 		#lo guardo en resultados
