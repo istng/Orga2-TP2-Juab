@@ -1,16 +1,16 @@
+asm vs c:
+barras multiples paralelas + d.e
+
 convert:
-1)Macros.
-2)Loop unrolling.
-3)Instrucción phadd.
+puntos + d.e.
 
 fourcombine:
-1)Cambiar como tomar pixeles.
-2)Loop unrolling.
+dos barras con d.e.
 
 zoom:
-1)Acceder con movdqa.
-2)Recorrer 3 veces la imagen.
+1)Acceder con mov alineada. -> grafico original
+2)Recorrer 3 veces la imagen. -> puntos + linea cuadratica (o polinomica) + resta entre los y-es -> ver como encontrar cte
 
 max closer:
-1) Recorrer hasta linea cache.
-2) Recorrer alrevez la matriz.
+1) Recorrer hasta linea cache. -> linea continua, interp
+2) Recorrer alrevez la matriz. -> grafico original
