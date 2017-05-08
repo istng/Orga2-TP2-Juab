@@ -3,6 +3,12 @@ global ASM_convertRGBtoYUV_loopUnrolling
 extern C_convertYUVtoRGB_defines
 extern C_convertRGBtoYUV_defines
 
+
+;IMPORTANTE: este código sólo funciona con matrices de dimensión multiplo de 16, ya que avanzo de a 16 sobre la imagen fuente y destino.
+;			El caso borde, para satisfacer que el código ande con matirces de dimensión multiplo de 4, no fue abordado por falta de tiempo,
+;			y por otro lado creemos que no perdemos generalidad al utilizar matrices de dimensión multiplo de 16 para este código en particular.
+
+
 ASM_convertYUVtoRGB_loopUnrolling:
 	;RDI-> *src, ESI-> int32 srcw, EDX-> int32 srch, RCX-> *dst, R8D-> int32 dstw, R9D-> dsth
 	push rbp
