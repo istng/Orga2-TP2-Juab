@@ -49,10 +49,10 @@ sub r11,3 ; r11 = borde superior
 
 xor rdx,rdx
 mov rax,rsi; rax = srcw
-mov r9,16; rdx = 16;
-div r9; rax = rax/16 ||| rdx = rax mod 16
+mov r9,10; rdx = 10;
+div r9; rax = rax/10 ||| rdx = rax mod 10
 
-mov rcx,rax; rcx = rax mod 16 == numero de lineas
+mov rcx,rax; rcx = rax mod 10 == numero de lineas
 mov rbp,rcx;
 xor rcx,rcx
 
@@ -62,21 +62,23 @@ je .ultimaLinea;
 push rcx
 
 ;/*vamos a guardarnos el indice_line*16 en rdx*/
-mov rdx,rcx;
-sal rdx,4; rdx = indice_linea*16
+mov rax,rcx; rax = indice
+mov rdx,10; rdx = 10
+mul rdx; rax = 10*rdx
+mov rdx,rax; rdx = indice_linea*10
 
 xor rcx,rcx; rcx = 0;
 
   .ciclo_filas:
   cmp rcx,r14;
   je .siguienteLinea;
-  push rdx; pusheamos a la pila el indice_linea*16
+  push rdx; pusheamos a la pila el indice_linea*10
   push rcx; pusheamos i
   mov rcx,0; rcx <--- tamaño de la linea de cache
     .ciclo_colunas:
     ; El pixel que tenemos que darle a ASM_kernelValues = src + 4*i*srcw +  4*j - offset_primero_Kernel
     ; Donde j tendria que ser = indice_linea*16 + j
-    cmp rcx,16;
+    cmp rcx,10;
     jg .fin_columnas
     mov rdi,r12 ; rdi = src
     mov rax,r13 ; rax = srcw
@@ -86,11 +88,11 @@ xor rcx,rcx; rcx = 0;
     pop rdx; rdx = indice_linea*16
     push rdx
     push r9
-    add rdx,rcx; /**** RDX = indice_linea*16+j ****/
-    add rax,rdx; rax = i*srcw + indice_linea*16+j
-    sal rax,2; rax = 4* (i*srcw + indice_linea*16+j)
+    add rdx,rcx; /**** RDX = indice_linea*10+j ****/
+    add rax,rdx; rax = i*srcw + indice_linea*10+j
+    sal rax,2; rax = 4* (i*srcw + indice_linea*10+j)
     push rax;guardamos el desplazamiento actual
-    add rdi,rax; rdi = src + 4*i*srcw +  4*(indice_linea*16 + j)
+    add rdi,rax; rdi = src + 4*i*srcw +  4*(indice_linea*10 + j)
     jmp .esBorde;
     .noLoEs:
     ; TODO: arreglar esBorde
@@ -121,15 +123,17 @@ jmp .ciclo_linea
 
 xor rdx,rdx
 mov rax,r13; rax = srcw
-mov r9,16; rdx = 16;
-div r9; rax = rax/16 ||| rdx = rax mod 16
+mov r9,10; rdx = 10;
+div r9; rax = rax/10 ||| rdx = rax mod 10
 mov rbp,rdx; rdx <-- ancho columna restante
 
 cmp rbp,0;
 je .fin;
 
-sal rax,4; rax = 16*indice_linea= 16*numero de lineas
-mov rdx,rax; rcx = indice_linea*16
+mov rdx,10; rdx = 10
+mul rdx; rax = 10*rdx
+mov rdx,rax; rdx = indice_linea*10
+
 
 xor rcx,rcx
   .ciclo_filas2:
@@ -151,11 +155,11 @@ xor rcx,rcx
     pop rdx; rdx = indice_linea*16
     push rdx
     push r9
-    add rdx,rcx; /**** RDX = indice_linea*16+j ****/
-    add rax,rdx; rax = i*srcw + indice_linea*16+j
-    sal rax,2; rax = 4* (i*srcw + indice_linea*16+j)
+    add rdx,rcx; /**** RDX = indice_linea*10+j ****/
+    add rax,rdx; rax = i*srcw + indice_linea*10+j
+    sal rax,2; rax = 4* (i*srcw + indice_linea*10+j)
     push rax;guardamos el desplazamiento actual
-    add rdi,rax; rdi = src + 4*i*srcw +  4*(indice_linea*16 + j)
+    add rdi,rax; rdi = src + 4*i*srcw +  4*(indice_linea*10 + j)
     jmp .esBorde2;
     .noLoEs2:
     ; TODO: arreglar esBorde

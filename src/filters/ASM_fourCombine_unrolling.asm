@@ -1,7 +1,6 @@
 global ASM_fourCombine_unrolling
 extern C_fourCombine_unrolling
 
-
 ;RDI <--src
 ;RSI <--srcw
 ;RDX <-- srch
@@ -67,6 +66,150 @@ movdqu [rdx],xmm1;
 ;------------------------------------------------
 
 
+;-----------------------------------------------------
+
+
+;/***********Buscamos datos de Memoria *************/
+
+;RDI <-- puntero a los pixeles del src
+;RSI <-- puntero al primer cuadrante
+;RDX <-- puntero al segundo cuadrante
+%macro ordenar56 0
+
+;TODO: CAMBIAR MOVDQU POR MOVDQA
+movdqa xmm1,[rdi] ;         xmm0 = | p4 | p3 | p2 | p1 |
+movdqa xmm2,[rdi + 16] ;    xmm1 = | p8 | p7 | p6 | p5 |
+;-------------------------------------------------------
+movdqa xmm3,[rdi + 32] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqa xmm4,[rdi + 48] ;    xmm1 = | p8 | p7 | p6 | p5 |
+;-------------------------------------------------------
+movdqa xmm5,[rdi + 64] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqa xmm6,[rdi + 80] ;    xmm1 = | p8 | p7 | p6 | p5 |
+;-------------------------------------------------------
+movdqa xmm7,[rdi + 96] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqa xmm8,[rdi + 112] ;    xmm1 = | p8 | p7 | p6 | p5 |
+;-------------------------------------------------------
+movdqa xmm9,[rdi + 128] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqa xmm10,[rdi + 144] ;    xmm1 = | p8 | p7 | p6 | p5 |
+;-------------------------------------------------------
+movdqa xmm11,[rdi + 160] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqa xmm12,[rdi + 176] ;    xmm1 = | p8 | p7 | p6 | p5 |
+;-------------------------------------------------------
+movdqa xmm13,[rdi + 192] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqa xmm14,[rdi + 208] ;    xmm1 = | p8 | p7 | p6 | p5 |
+;-------------------------------------------------------
+
+
+
+;/******************Procesamos******************/
+
+;-------------------------------------------------------
+movdqu xmm0,xmm1
+pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
+pshufd xmm2,xmm2,10001101b; xmm2 = | p7 | p5 | p8 | p6 |
+
+pblendw xmm1,xmm0,00001111b; xmm1 = | ?? | ?? | p3 | p1 |
+pblendw xmm1,xmm2,11110000b; xmm1 = | p7 | p5 | p3 | p1 |
+
+pblendw xmm2,xmm0,11110000b; xmm2 = | p4 | p2 | p8 | p6 |
+pshufd  xmm2,xmm2,01001110b; xmm2 = | p8 | p6 | p4 | p2 |
+;-------------------------------------------------------
+movdqu xmm0,xmm3
+pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
+pshufd xmm4,xmm4,10001101b; xmm4 = | p7 | p5 | p8 | p6 |
+
+pblendw xmm3,xmm0,00001111b; xmm3 = | ?? | ?? | p3 | p1 |
+pblendw xmm3,xmm4,11110000b; xmm1 = | p7 | p5 | p3 | p1 |
+
+pblendw xmm4,xmm0,11110000b; xmm4 = | p4 | p2 | p8 | p6 |
+pshufd  xmm4,xmm4,01001110b; xmm4 = | p8 | p6 | p4 | p2 |
+;-------------------------------------------------------
+movdqu xmm0,xmm5
+pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
+pshufd xmm6,xmm6,10001101b; xmm6 = | p7 | p5 | p8 | p6 |
+
+pblendw xmm5,xmm0,00001111b; xmm5 = | ?? | ?? | p3 | p1 |
+pblendw xmm5,xmm6,11110000b; xmm5 = | p7 | p5 | p3 | p1 |
+
+pblendw xmm6,xmm0,11110000b; xmm6 = | p4 | p2 | p8 | p6 |
+pshufd  xmm6,xmm6,01001110b; xmm6 = | p8 | p6 | p4 | p2 |
+;-------------------------------------------------------
+movdqu xmm0,xmm7
+pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
+pshufd xmm8,xmm8,10001101b; xmm8 = | p7 | p5 | p8 | p6 |
+
+pblendw xmm7,xmm0,00001111b; xmm7 = | ?? | ?? | p3 | p1 |
+pblendw xmm7,xmm8,11110000b; xmm7 = | p7 | p5 | p3 | p1 |
+
+pblendw xmm8,xmm0,11110000b; xmm8 = | p4 | p2 | p8 | p6 |
+pshufd  xmm8,xmm8,01001110b; xmm8 = | p8 | p6 | p4 | p2 |
+;-------------------------------------------------------
+movdqu xmm0,xmm9
+pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
+pshufd xmm10,xmm10,10001101b; xmm10 = | p7 | p5 | p8 | p6 |
+
+pblendw xmm9,xmm0,00001111b; xmm9 = | ?? | ?? | p3 | p1 |
+pblendw xmm9,xmm10,11110000b; xmm9 = | p7 | p5 | p3 | p1 |
+
+pblendw xmm10,xmm0,11110000b; xmm10 = | p4 | p2 | p8 | p6 |
+pshufd  xmm10,xmm10,01001110b; xmm10 = | p8 | p6 | p4 | p2 |
+;-------------------------------------------------------
+movdqu xmm0,xmm11
+pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
+pshufd xmm12,xmm12,10001101b; xmm12 = | p7 | p5 | p8 | p6 |
+
+pblendw xmm11,xmm0,00001111b; xmm11 = | ?? | ?? | p3 | p1 |
+pblendw xmm11,xmm12,11110000b; xmm11 = | p7 | p5 | p3 | p1 |
+
+pblendw xmm12,xmm0,11110000b; xmm12 = | p4 | p2 | p8 | p6 |
+pshufd  xmm12,xmm12,01001110b; xmm12 = | p8 | p6 | p4 | p2 |
+;-------------------------------------------------------
+movdqu xmm0,xmm13
+pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
+pshufd xmm14,xmm14,10001101b; xmm14 = | p7 | p5 | p8 | p6 |
+
+pblendw xmm13,xmm0,00001111b; xmm13 = | ?? | ?? | p3 | p1 |
+pblendw xmm13,xmm14,11110000b; xmm1 = | p7 | p5 | p3 | p1 |
+
+pblendw xmm14,xmm0,11110000b; xmm14 = | p4 | p2 | p8 | p6 |
+pshufd  xmm14,xmm14,01001110b; xmm14 = | p8 | p6 | p4 | p2 |
+;-------------------------------------------------------
+
+
+
+;/****************Escribimos en Memoria*****************/
+
+movdqa [rsi],xmm1;
+movdqa [rdx],xmm2;
+;----------------------------------------------------
+movdqa [rsi + 16],xmm3;
+movdqa [rdx + 16],xmm4;
+;----------------------------------------------------
+movdqa [rsi + 32],xmm5;
+movdqa [rdx + 32],xmm6;
+;----------------------------------------------------
+movdqa [rsi + 48],xmm7;
+movdqa [rdx + 48],xmm8;
+;----------------------------------------------------
+movdqa [rsi + 64],xmm9;
+movdqa [rdx + 64],xmm10;
+;----------------------------------------------------
+movdqa [rsi + 80],xmm11;
+movdqa [rdx + 80],xmm12;
+;----------------------------------------------------
+movdqa [rsi + 96],xmm13;
+movdqa [rdx + 96],xmm14;
+
+
+
+
+%endmacro
+;------------------------------------------------
+
+
+
+
+
 
 
 ASM_fourCombine_unrolling:
@@ -108,7 +251,7 @@ add r11,r9 ; r11 = dst + (4*srcw) * (1/2*srch) + 4*1/2*srcw  <--- 4to Cuadrante
 
 xor rdx,rdx
 mov rax,r13; rax = srcw
-mov rsi,64
+mov rsi,56
 div rsi; rax = srcw /64 || rdx = srcw mod 64
 mov rbp,rax; rbp = srcw / 64
 mov rbx,rdx; rdx = srcw mod 64
@@ -132,38 +275,10 @@ push rcx
 
 
 ;/**** Procesamos 64 pixeles *****/
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
+  ordenar56; ordenamos 8 pixeles
+  add rdi,224; avanzamos el puntero en 8 pixeles (32 bytes)
+  add rsi,112 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
+  add rdx,112 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
   add rcx,1
   jmp .ciclo_columnasPar
 
@@ -204,38 +319,10 @@ push rcx
 
 
 ;/**** Procesamos 64 pixeles *****/
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
-  ordenar8; ordenamos 8 pixeles
-  add rdi,32 ; avanzamos el puntero en 8 pixeles (32 bytes)
-  add rsi,16 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
-  add rdx,16 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
+  ordenar56; ordenamos 8 pixeles
+  add rdi,224; avanzamos el puntero en 8 pixeles (32 bytes)
+  add rsi,112 ; avanzamos el puntero del 1er cuadrante en 4 pixeles (16 bytes)
+  add rdx,112 ; avanzamos el puntero del 2do cuadrante en 4 pixeles (16 bytes)
   add rcx,1
   jmp .ciclo_columnasImpar
 

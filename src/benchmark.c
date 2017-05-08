@@ -67,8 +67,13 @@ int main(int argc __attribute__((unused)), char* argv[]){
       ASM_convertRGBtoYUV(dataSrc,w,h,dataDst,w,h);
       RDTSC_STOP(end);
     }
-    
+
     else if(strcmp(FUNCION, "ASM_convertYUVtoRGB_phaddd") == 0){
+      RDTSC_START(start);
+      ASM_convertYUVtoRGB_phaddd(dataSrc,w,h,dataDst,w,h);
+      RDTSC_STOP(end);
+    }
+    else if(strcmp(FUNCION, "ASM_convertRGBtoYUV_phaddd") == 0){
       RDTSC_START(start);
       ASM_convertYUVtoRGB_phaddd(dataSrc,w,h,dataDst,w,h);
       RDTSC_STOP(end);
@@ -78,7 +83,17 @@ int main(int argc __attribute__((unused)), char* argv[]){
       ASM_convertYUVtoRGB_macros(dataSrc,w,h,dataDst,w,h);
       RDTSC_STOP(end);
     }
+    else if(strcmp(FUNCION, "ASM_convertRGBtoYUV_macros") == 0){
+      RDTSC_START(start);
+      ASM_convertYUVtoRGB_macros(dataSrc,w,h,dataDst,w,h);
+      RDTSC_STOP(end);
+    }
     else if(strcmp(FUNCION, "ASM_convertYUVtoRGB_loopUnrolling") == 0){
+      RDTSC_START(start);
+      ASM_convertYUVtoRGB_loopUnrolling(dataSrc,w,h,dataDst,w,h);
+      RDTSC_STOP(end);
+    }
+    else if(strcmp(FUNCION, "ASM_convertRGBtoYUV_loopUnrolling") == 0){
       RDTSC_START(start);
       ASM_convertYUVtoRGB_loopUnrolling(dataSrc,w,h,dataDst,w,h);
       RDTSC_STOP(end);
@@ -97,6 +112,11 @@ int main(int argc __attribute__((unused)), char* argv[]){
     }
 
     else if(strcmp(FUNCION, "ASM_fourCombine") == 0){
+      RDTSC_START(start);
+      ASM_fourCombine(dataSrc,w,h,dataDst,w,h);
+      RDTSC_STOP(end);
+    }
+    else if(strcmp(FUNCION, "ASM_fourCombine_v2") == 0){
       RDTSC_START(start);
       ASM_fourCombine(dataSrc,w,h,dataDst,w,h);
       RDTSC_STOP(end);
@@ -144,6 +164,11 @@ int main(int argc __attribute__((unused)), char* argv[]){
       RDTSC_STOP(end);
     }
     else if(strcmp(FUNCION, "ASM_maxCloser") == 0){
+      RDTSC_START(start);
+      ASM_maxCloser(dataSrc,w,h,dataDst,w,h,VAL);
+      RDTSC_STOP(end);
+    }
+    else if(strcmp(FUNCION, "ASM_maxCloser_v2") == 0){
       RDTSC_START(start);
       ASM_maxCloser(dataSrc,w,h,dataDst,w,h,VAL);
       RDTSC_STOP(end);
