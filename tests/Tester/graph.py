@@ -3,14 +3,18 @@ import re
 import numpy
 import matplotlib.pyplot as plt
 
-resultadosC = []
-resultadosASM = []
-resultadosASMp = []
-resultadosASMm = []
-resultadosASMlu = []
+resultadosCc = []
+resultadosASMc = []
 
-for file in os.listdir("ResultadosO3MC/ASM_maxCloser"):
-	f = open("ResultadosO3MC/ASM_maxCloser/" + file,"r")
+resultadosCl = []
+resultadosASMl = []
+
+
+
+
+
+for file in os.listdir("ResultadosO3/C_fourCombine"):
+	f = open("ResultadosO3/C_fourCombine/" + file,"r")
 	try:
 		n = int(re.search("lena.(.+?)x",file).group(1))
 	except:
@@ -22,15 +26,23 @@ for file in os.listdir("ResultadosO3MC/ASM_maxCloser"):
 	mediciones.sort()
 	mediciones = mediciones[0:159]
 	TICKSxPIXEL = numpy.average(mediciones) / size
-	resultadosC.append( ( n , TICKSxPIXEL ) )
+	desvio = numpy.std(mediciones)
+	try:
+		n = int(re.search("lena.(.+?)x",file).group(1))
+		resultadosCl.append( ( n , TICKSxPIXEL ) )
+	except:
+		n = int(re.search("colores.(.+?)x",file).group(1))
+		resultadosCc.append( ( n , TICKSxPIXEL ) )
 
 
-for file in os.listdir("ResultadosO3/ASM_maxCloser_cache"):
-	f = open("ResultadosO3/ASM_maxCloser_cache/" + file,"r")
+
+for file in os.listdir("ResultadosO3/ASM_fourCombine"):
+	f = open("ResultadosO3/ASM_fourCombine/" + file,"r")
 	try:
 		n = int(re.search("lena.(.+?)x",file).group(1))
 	except:
 		n = int(re.search("colores.(.+?)x",file).group(1))
+
 	size = n*n
 	mediciones = []
 	for line in f:
@@ -38,14 +50,25 @@ for file in os.listdir("ResultadosO3/ASM_maxCloser_cache"):
 	mediciones.sort()
 	mediciones = mediciones[0:159]
 	TICKSxPIXEL = numpy.average(mediciones) / size
-	resultadosASM.append( ( n , TICKSxPIXEL ) )
-	
+	desvio = numpy.std(mediciones)
+	try:
+		n = int(re.search("lena.(.+?)x",file).group(1))
+		resultadosASMl.append( ( n , TICKSxPIXEL ) )
+	except:
+		n = int(re.search("colores.(.+?)x",file).group(1))
+		resultadosASMc.append( ( n , TICKSxPIXEL ) )
 
-plt.plot([e[0] for e in resultadosC],  [e[1] for e in resultadosC],"bo")
-plt.plot([e[0] for e in resultadosASM], [e[1] for e in resultadosASM],"ro")
 
+
+# Aca pueden modifican para cambiar: tipo de grafico, variable , colores , etc..
+plt.plot([e[0] for e in resultadosCl],  [e[1] for e in resultadosCl],"bo")
+plt.plot([e[0] for e in resultadosASMl], [e[1] for e in resultadosASMl],"ro")
+
+plt.show()
+
+plt.plot([e[0] for e in resultadosCc],  [e[1] for e in resultadosCc],"bv")
+plt.plot([e[0] for e in resultadosASMc], [e[1] for e in resultadosASMc],"rv")
 
 
 
 plt.show()
-
