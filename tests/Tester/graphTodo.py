@@ -16,9 +16,13 @@ resultadosCl_TxP = []
 resultadosASMl_TxP = []
 
 
+funcion1 = "C_maxCloser"
+funcion2 = "ASM_maxCloser"
 
-for file in os.listdir("ResultadosO3/C_fourCombine"):
-	f = open("ResultadosO3/C_fourCombine/" + file,"r")
+
+
+for file in os.listdir("ResultadosO3/" + funcion1):
+	f = open("ResultadosO3/" + funcion1 + "/" + file,"r")
 	try:
 		n = int(re.search("lena.(.+?)x",file).group(1))
 	except:
@@ -44,8 +48,8 @@ for file in os.listdir("ResultadosO3/C_fourCombine"):
 
 
 
-for file in os.listdir("ResultadosO3/ASM_fourCombine"):
-	f = open("ResultadosO3/ASM_fourCombine/" + file,"r")
+for file in os.listdir("ResultadosO3/" + funcion2):
+	f = open("ResultadosO3/" + funcion2 + "/" + file,"r")
 	try:
 		n = int(re.search("lena.(.+?)x",file).group(1))
 	except:
@@ -73,9 +77,12 @@ for file in os.listdir("ResultadosO3/ASM_fourCombine"):
 
 # Aca pueden modifican para cambiar: tipo de grafico, variable , colores , etc..
 
+os.mkdir(funcion1 + " vs "  + funcion2 )
+os.chdir(funcion1 + " vs "  + funcion2 )
+
 plt.plot([e[0] for e in resultadosCl],  [e[1] for e in resultadosCl],"bo", label="C")
 plt.plot([e[0] for e in resultadosASMl], [e[1] for e in resultadosASMl],"ro", label="ASM")
-plt.legend(bbox_to_anchor=(0, 0), loc=2, borderaxespad=0.)
+plt.legend(bbox_to_anchor=(0, 0), loc=1, borderaxespad=0.)
 plt.xlabel("Dimension")
 plt.ylabel("#Ciclos")
 
@@ -85,7 +92,7 @@ plt.close()
 
 plt.plot([e[0] for e in resultadosCc],  [e[1] for e in resultadosCc],"bv", label="C")
 plt.plot([e[0] for e in resultadosASMc], [e[1] for e in resultadosASMc],"rv", label="ASM")
-plt.legend(bbox_to_anchor=(0, 0), loc=2, borderaxespad=0.)
+plt.legend(bbox_to_anchor=(0, 0), loc=1, borderaxespad=0.)
 plt.xlabel("Dimension")
 plt.ylabel("#Ciclos")
 
@@ -95,7 +102,7 @@ plt.close()
 
 plt.plot([e[0] for e in resultadosCl_TxP],  [e[1] for e in resultadosCl_TxP],"bo", label="C")
 plt.plot([e[0] for e in resultadosASMl_TxP], [e[1] for e in resultadosASMl_TxP],"ro", label="ASM")
-plt.legend(bbox_to_anchor=(0, 0), loc=2, borderaxespad=0.)
+plt.legend(bbox_to_anchor=(0, 0), loc=1, borderaxespad=0.)
 plt.xlabel("Dimension")
 plt.ylabel("#Ciclos/pixel")
 plt.savefig("lenaCicpix.png")
@@ -104,39 +111,10 @@ plt.close()
 
 plt.plot([e[0] for e in resultadosCc_TxP],  [e[1] for e in resultadosCc_TxP],"bv", label="C")
 plt.plot([e[0] for e in resultadosASMc_TxP], [e[1] for e in resultadosASMc_TxP],"rv", label="ASM")
-plt.legend(bbox_to_anchor=(0, 0), loc=2, borderaxespad=0.)
+plt.legend(bbox_to_anchor=(0, 0), loc=1, borderaxespad=0.)
 plt.xlabel("Dimension")
 plt.ylabel("#Ciclos/pixel")
 plt.savefig("coloresCicpix.png")
 plt.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ticks por pixel 
-
-#	TICKSxPIXEL = numpy.average(mediciones)# / size
-#	desvio = numpy.std(mediciones)
-#	try:
-#		n = int(re.search("lena.(.+?)x",file).group(1))
-#		resultadosASMl.append( ( n , TICKSxPIXEL ) )
-#	except:
-#		n = int(re.search("colores.(.+?)x",file).group(1))
-#		resultadosASMc.append( ( n , TICKSxPIXEL ) )
-
-
-
-
-
 
 
