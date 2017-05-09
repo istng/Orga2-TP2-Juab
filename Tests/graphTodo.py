@@ -35,8 +35,8 @@ resultadosASMl_TxP_dst = []
 
 
 
-funcion1 = "C_fourCombine"
-funcion2 = "ASM_fourCombine"
+funcion1 = "ASM_convertRGBtoYUV"
+funcion2 = "ASM_convertRGBtoYUV_phaddd"
 
 
 
@@ -136,7 +136,7 @@ plt.bar([e[0] + 20 for e in resultadosCl_TxP],  [e[1] for e in resultadosCl_TxP]
 plt.bar([e[0] for e in resultadosASMl_TxP], [e[1] for e in resultadosASMl_TxP], width, color="red", label="ASM", yerr=resultadosASMl_TxP_dst, ecolor="magenta")
 plt.legend(bbox_to_anchor=(0, 0), loc=1, borderaxespad=0.)
 plt.xlabel("Dimension")
-plt.ylabel("#Ciclos")
+plt.ylabel("#Ciclos/Pixel")
 plt.savefig("lenaCicPix.png")
 plt.close()
 
@@ -146,7 +146,7 @@ plt.bar([e[0] + 20 for e in resultadosCc_TxP],  [e[1] for e in resultadosCc_TxP]
 plt.bar([e[0] for e in resultadosASMc_TxP], [e[1] for e in resultadosASMc_TxP], width, color="red", label="ASM", yerr=resultadosASMc_TxP_dst, ecolor="magenta")
 plt.legend(bbox_to_anchor=(0, 0), loc=1, borderaxespad=0.)
 plt.xlabel("Dimension")
-plt.ylabel("#Ciclos")
+plt.ylabel("#Ciclos/Pixel")
 plt.savefig("coloresCicPix.png")
 plt.close()
 
@@ -173,7 +173,7 @@ plt.close()
 #plt.errorbar([e[0] for e in resultadosASMl_TxP], [e[1] for e in resultadosASMl_TxP], resultadosASMl_TxP_dst, linestyle='None', marker='^', label="ASM")
 #plt.legend(bbox_to_anchor=(0, 0), loc=1, borderaxespad=0.)
 #plt.xlabel("Dimension")
-#plt.ylabel("#Ciclos")
+#plt.ylabel("#Ciclos/Pixel")
 #plt.savefig("lenaCicPix.png")
 #plt.close()
 #
@@ -181,6 +181,6 @@ plt.close()
 #plt.errorbar([e[0] for e in resultadosASMc_TxP], [e[1] for e in resultadosASMc_TxP], resultadosASMc_TxP_dst, linestyle='None', marker='^', label="ASM")
 #plt.legend(bbox_to_anchor=(0, 0), loc=1, borderaxespad=0.)
 #plt.xlabel("Dimension")
-#plt.ylabel("#Ciclos")
+#plt.ylabel("#Ciclos/Pixel")
 #plt.savefig("coloresCicPix.png")
 #plt.close()
