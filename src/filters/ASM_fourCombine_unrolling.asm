@@ -76,27 +76,26 @@ movdqu [rdx],xmm1;
 ;RDX <-- puntero al segundo cuadrante
 %macro ordenar56 0
 
-;TODO: CAMBIAR MOVDQU POR MOVDQA
-movdqa xmm1,[rdi] ;         xmm0 = | p4 | p3 | p2 | p1 |
-movdqa xmm2,[rdi + 16] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm1,[rdi] ;         xmm0 = | p4 | p3 | p2 | p1 |
+movdqu xmm2,[rdi + 16] ;    xmm1 = | p8 | p7 | p6 | p5 |
 ;-------------------------------------------------------
-movdqa xmm3,[rdi + 32] ;    xmm1 = | p8 | p7 | p6 | p5 |
-movdqa xmm4,[rdi + 48] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm3,[rdi + 32] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm4,[rdi + 48] ;    xmm1 = | p8 | p7 | p6 | p5 |
 ;-------------------------------------------------------
-movdqa xmm5,[rdi + 64] ;    xmm1 = | p8 | p7 | p6 | p5 |
-movdqa xmm6,[rdi + 80] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm5,[rdi + 64] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm6,[rdi + 80] ;    xmm1 = | p8 | p7 | p6 | p5 |
 ;-------------------------------------------------------
-movdqa xmm7,[rdi + 96] ;    xmm1 = | p8 | p7 | p6 | p5 |
-movdqa xmm8,[rdi + 112] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm7,[rdi + 96] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm8,[rdi + 112] ;    xmm1 = | p8 | p7 | p6 | p5 |
 ;-------------------------------------------------------
-movdqa xmm9,[rdi + 128] ;    xmm1 = | p8 | p7 | p6 | p5 |
-movdqa xmm10,[rdi + 144] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm9,[rdi + 128] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm10,[rdi + 144] ;    xmm1 = | p8 | p7 | p6 | p5 |
 ;-------------------------------------------------------
-movdqa xmm11,[rdi + 160] ;    xmm1 = | p8 | p7 | p6 | p5 |
-movdqa xmm12,[rdi + 176] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm11,[rdi + 160] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm12,[rdi + 176] ;    xmm1 = | p8 | p7 | p6 | p5 |
 ;-------------------------------------------------------
-movdqa xmm13,[rdi + 192] ;    xmm1 = | p8 | p7 | p6 | p5 |
-movdqa xmm14,[rdi + 208] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm13,[rdi + 192] ;    xmm1 = | p8 | p7 | p6 | p5 |
+movdqu xmm14,[rdi + 208] ;    xmm1 = | p8 | p7 | p6 | p5 |
 ;-------------------------------------------------------
 
 
@@ -113,6 +112,10 @@ pblendw xmm1,xmm2,11110000b; xmm1 = | p7 | p5 | p3 | p1 |
 
 pblendw xmm2,xmm0,11110000b; xmm2 = | p4 | p2 | p8 | p6 |
 pshufd  xmm2,xmm2,01001110b; xmm2 = | p8 | p6 | p4 | p2 |
+;/****************Escribimos en Memoria*****************/
+
+movdqu [rsi],xmm1;
+movdqu [rdx],xmm2;
 ;-------------------------------------------------------
 movdqu xmm0,xmm3
 pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
@@ -123,6 +126,9 @@ pblendw xmm3,xmm4,11110000b; xmm1 = | p7 | p5 | p3 | p1 |
 
 pblendw xmm4,xmm0,11110000b; xmm4 = | p4 | p2 | p8 | p6 |
 pshufd  xmm4,xmm4,01001110b; xmm4 = | p8 | p6 | p4 | p2 |
+;/****************Escribimos en Memoria*****************/
+movdqu [rsi + 16],xmm3;
+movdqu [rdx + 16],xmm4;
 ;-------------------------------------------------------
 movdqu xmm0,xmm5
 pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
@@ -133,6 +139,9 @@ pblendw xmm5,xmm6,11110000b; xmm5 = | p7 | p5 | p3 | p1 |
 
 pblendw xmm6,xmm0,11110000b; xmm6 = | p4 | p2 | p8 | p6 |
 pshufd  xmm6,xmm6,01001110b; xmm6 = | p8 | p6 | p4 | p2 |
+;/****************Escribimos en Memoria*****************/
+movdqu [rsi + 32],xmm5;
+movdqu [rdx + 32],xmm6;
 ;-------------------------------------------------------
 movdqu xmm0,xmm7
 pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
@@ -143,6 +152,9 @@ pblendw xmm7,xmm8,11110000b; xmm7 = | p7 | p5 | p3 | p1 |
 
 pblendw xmm8,xmm0,11110000b; xmm8 = | p4 | p2 | p8 | p6 |
 pshufd  xmm8,xmm8,01001110b; xmm8 = | p8 | p6 | p4 | p2 |
+;/****************Escribimos en Memoria*****************/
+movdqu [rsi + 48],xmm7;
+movdqu [rdx + 48],xmm8;
 ;-------------------------------------------------------
 movdqu xmm0,xmm9
 pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
@@ -153,6 +165,9 @@ pblendw xmm9,xmm10,11110000b; xmm9 = | p7 | p5 | p3 | p1 |
 
 pblendw xmm10,xmm0,11110000b; xmm10 = | p4 | p2 | p8 | p6 |
 pshufd  xmm10,xmm10,01001110b; xmm10 = | p8 | p6 | p4 | p2 |
+;/****************Escribimos en Memoria*****************/
+movdqu [rsi + 64],xmm9;
+movdqu [rdx + 64],xmm10;
 ;-------------------------------------------------------
 movdqu xmm0,xmm11
 pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
@@ -163,6 +178,9 @@ pblendw xmm11,xmm12,11110000b; xmm11 = | p7 | p5 | p3 | p1 |
 
 pblendw xmm12,xmm0,11110000b; xmm12 = | p4 | p2 | p8 | p6 |
 pshufd  xmm12,xmm12,01001110b; xmm12 = | p8 | p6 | p4 | p2 |
+;/****************Escribimos en Memoria*****************/
+movdqu [rsi + 80],xmm11;
+movdqu [rdx + 80],xmm12;
 ;-------------------------------------------------------
 movdqu xmm0,xmm13
 pshufd xmm0,xmm0,11011000b; xmm0 = | p4 | p2 | p3 | p1 |
@@ -173,32 +191,11 @@ pblendw xmm13,xmm14,11110000b; xmm1 = | p7 | p5 | p3 | p1 |
 
 pblendw xmm14,xmm0,11110000b; xmm14 = | p4 | p2 | p8 | p6 |
 pshufd  xmm14,xmm14,01001110b; xmm14 = | p8 | p6 | p4 | p2 |
+;/****************Escribimos en Memoria*****************/
+movdqu [rsi + 96],xmm13;
+movdqu [rdx + 96],xmm14;
 ;-------------------------------------------------------
 
-
-
-;/****************Escribimos en Memoria*****************/
-
-movdqa [rsi],xmm1;
-movdqa [rdx],xmm2;
-;----------------------------------------------------
-movdqa [rsi + 16],xmm3;
-movdqa [rdx + 16],xmm4;
-;----------------------------------------------------
-movdqa [rsi + 32],xmm5;
-movdqa [rdx + 32],xmm6;
-;----------------------------------------------------
-movdqa [rsi + 48],xmm7;
-movdqa [rdx + 48],xmm8;
-;----------------------------------------------------
-movdqa [rsi + 64],xmm9;
-movdqa [rdx + 64],xmm10;
-;----------------------------------------------------
-movdqa [rsi + 80],xmm11;
-movdqa [rdx + 80],xmm12;
-;----------------------------------------------------
-movdqa [rsi + 96],xmm13;
-movdqa [rdx + 96],xmm14;
 
 
 
