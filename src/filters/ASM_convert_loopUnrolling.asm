@@ -94,23 +94,28 @@ ASM_convertYUVtoRGB_loopUnrolling:
 	punpcklwd xmm3, xmm10;	xmm3 = a2|v2|u2|y2
 	punpckhwd xmm4, xmm10;	xmm4 = a3|v3|u3|y3
 
+
 	;hago lo mismo de arriba pero para xmm15:
+	;copio xmm0 para desempaquetar luego, y hago su mascara
 	movdqu xmm12, xmm15
 	movdqu xmm14, xmm15
 	xorps xmm10, xmm10
 
-	punpcklbw xmm12, xmm10
-	punpckhbw xmm14, xmm10
+	;desempaqueto xmm0 de byte a word:
+	punpcklbw xmm12, xmm10;	xmm1 = a0|0|v0|0|u0|0|y0|0|a1|0|v1|0|u1|0|y1|0
+	punpckhbw xmm14, xmm10;	xmm2 = a2|0|v2|0|u2|0|y2|0|a3|0|v3|0|u3|0|y3|0
 	
+	;desempaqueto xmm1 de word a double word:
 	xorps xmm10, xmm10
 	movdqu xmm13, xmm12
-	punpcklwd xmm12, xmm10
-	punpckhwd xmm13, xmm10
+	punpcklwd xmm12, xmm10;	xmm1 = a0|v0|u0|y0
+	punpckhwd xmm13, xmm10;	xmm2 = a1|v1|u1|y1
 
+	;desempaqueto xmm3 de word a double word:
 	xorps xmm10, xmm10
-	movdqu xmm15, xmm13
-	punpcklwd xmm13, xmm10
-	punpckhwd xmm15, xmm10
+	movdqu xmm15, xmm14
+	punpcklwd xmm14, xmm10;	xmm3 = a2|v2|u2|y2
+	punpckhwd xmm15, xmm10;	xmm4 = a3|v3|u3|y3
 
 	;**===========**
 	;**|PARA XMM1|**
@@ -220,20 +225,20 @@ ASM_convertYUVtoRGB_loopUnrolling:
 	;**===========**
 		;CONSEGUIMOS B0:
 		movdqu xmm9, xmm12
-		movdqu xmm12, xmm7
+		movdqu xmm10, xmm7
 		call .convertirRGB
 		;tomo los valores obtenidos y los pego en xmm8:
 		insertps xmm8, xmm12, 00000000b
 		insertps xmm8, xmm9, 11010000b
 		;CONSEGUIMOS G0:
 		movdqu xmm9, xmm12
-		movdqu xmm12, xmm6
+		movdqu xmm10, xmm6
 		call .convertirRGB
 		;tomo el valor obtenido y lo pego en xmm8:
 		insertps xmm8, xmm9, 11100000b
 		;CONSEGUIMOS R0:
 		movdqu xmm9, xmm12
-		movdqu xmm12, xmm5
+		movdqu xmm10, xmm5
 		call .convertirRGB
 		;tomo el valor obtenido y lo pego en xmm8:
 		insertps xmm8, xmm9, 11110000b
@@ -245,20 +250,20 @@ ASM_convertYUVtoRGB_loopUnrolling:
 	;**===========**
 		;CONSEGUIMOS B1:
 		movdqu xmm9, xmm13
-		movdqu xmm12, xmm7
+		movdqu xmm10, xmm7
 		call .convertirRGB
 		;tomo los valores obtenidos y los pego en xmm0:
 		insertps xmm8, xmm13, 00000000b
 		insertps xmm8, xmm9, 11010000b
 		;CONSEGUIMOS G1:
 		movdqu xmm9, xmm13
-		movdqu xmm12, xmm6
+		movdqu xmm10, xmm6
 		call .convertirRGB
 		;tomo el valor obtenido y lo pego en xmm8:
 		insertps xmm8, xmm9, 11100000b
 		;CONSEGUIMOS R1:
 		movdqu xmm9, xmm13
-		movdqu xmm12, xmm5
+		movdqu xmm10, xmm5
 		call .convertirRGB
 		;tomo el valor obtenido y lo pego en xmm8:
 		insertps xmm8, xmm9, 11110000b
@@ -271,20 +276,20 @@ ASM_convertYUVtoRGB_loopUnrolling:
 	;**===========**
 		;CONSEGUIMOS B2:
 		movdqu xmm9, xmm14
-		movdqu xmm12, xmm7
+		movdqu xmm10, xmm7
 		call .convertirRGB
 		;tomo los valores obtenidos y los pego en xmm0:
 		insertps xmm8, xmm14, 00000000b
 		insertps xmm8, xmm9, 11010000b
 		;CONSEGUIMOS G2:
 		movdqu xmm9, xmm14
-		movdqu xmm12, xmm6
+		movdqu xmm10, xmm6
 		call .convertirRGB
 		;tomo el valor obtenido y lo pego en xmm8:
 		insertps xmm8, xmm9, 11100000b
 		;CONSEGUIMOS R2:
 		movdqu xmm9, xmm14
-		movdqu xmm12, xmm5
+		movdqu xmm10, xmm5
 		call .convertirRGB
 		;tomo el valor obtenido y lo pego en xmm8:
 		insertps xmm8, xmm9, 11110000b
@@ -297,20 +302,20 @@ ASM_convertYUVtoRGB_loopUnrolling:
 	;**===========**
 		;CONSEGUIMOS B3:
 		movdqu xmm9, xmm15
-		movdqu xmm12, xmm7
+		movdqu xmm10, xmm7
 		call .convertirRGB
 		;tomo los valores obtenidos y los pego en xmm0:
 		insertps xmm8, xmm15, 00000000b
 		insertps xmm8, xmm9, 11010000b
 		;CONSEGUIMOS G3:
 		movdqu xmm9, xmm15
-		movdqu xmm12, xmm6
+		movdqu xmm10, xmm6
 		call .convertirRGB
 		;tomo el valor obtenido y lo pego en xmm8:
 		insertps xmm8, xmm9, 11100000b
 		;CONSEGUIMOS R3:
 		movdqu xmm9, xmm15;		xmm9 = a|v|u|y
-		movdqu xmm12, xmm5
+		movdqu xmm10, xmm5
 		call .convertirRGB
 		;tomo el valor obtenido y lo pego en xmm8:
 		insertps xmm8, xmm9, 11110000b
