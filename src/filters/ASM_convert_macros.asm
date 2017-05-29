@@ -551,17 +551,17 @@ ASM_convertRGBtoYUV_macros:
 		;===============
 		;lo pego en dst:
 		;===============
-		movq [r15], xmm1
+		movdqu [r15], xmm1
 
 
 
 	;ya procese 16 componentes de pixel mas:
-	sub r12, 8
+	sub r12, 16
 	cmp r12, 0
 	je .fin
 	;avanzo en la imagen src y dst:
-	lea rbx, [rbx + 8]
-	lea r15, [r15 + 8]
+	lea rbx, [rbx + 16]
+	lea r15, [r15 + 16]
 	jmp .avanzar
 
 	.fin:
