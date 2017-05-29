@@ -220,7 +220,7 @@ ASM_convertYUVtoRGB_phaddd:
 		;CONSEGUIMOS R3:
 		;===============
 		movdqu xmm10, xmm4
-		movdqu xmm11, xmm7
+		movdqu xmm11, xmm5
 		call .convertirRGB
 		;tomo el valor obtenido y lo pego en xmm15:
 		insertps xmm15, xmm9, 00110000b
@@ -242,17 +242,17 @@ ASM_convertYUVtoRGB_phaddd:
 		;===============
 		;lo pego en dst:
 		;===============
-		movq [r15], xmm1
+		movdqu [r15], xmm1
 
 
 
 	;ya procese 16 componentes de pixel mas:
-	sub r12, 8
+	sub r12, 16
 	cmp r12, 0
 	je .fin
 	;avanzo en la imagen src y dst:
-	lea rbx, [rbx + 8]
-	lea r15, [r15 + 8]
+	lea rbx, [rbx + 16]
+	lea r15, [r15 + 16]
 	jmp .avanzar
 
 	.fin:
@@ -515,7 +515,7 @@ ASM_convertRGBtoYUV_phaddd:
 		;CONSEGUIMOS Y3:
 		;===============
 		movdqu xmm10, xmm4
-		movdqu xmm11, xmm7
+		movdqu xmm11, xmm5
 		mov r8d, 128
 		mov r9d, 16
 		call .convertirYUV	

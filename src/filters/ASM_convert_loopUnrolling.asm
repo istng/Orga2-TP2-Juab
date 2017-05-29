@@ -71,7 +71,7 @@ ASM_convertYUVtoRGB_loopUnrolling:
 	.avanzar:
 	;hago el acceso memoria consecutivamente:
 	movdqu xmm0, [rbx];		xmm0 = a0|v0|u0|y0|a1|v1|u1|y1|a2|v2|u2|y2|a3|v3|u3|y3
-	movdqu xmm15, [rbx + 8];	xmm8 = a4|v4|u4|y4|a5|v5|u5|y5|a6|v6|u6|y6|a7|v7|u7|y7
+	movdqu xmm15, [rbx + 16];	xmm8 = a4|v4|u4|y4|a5|v5|u5|y5|a6|v6|u6|y6|a7|v7|u7|y7
 	
 	;copio xmm0 para desempaquetar luego, y hago su mascara
 	movdqu xmm1, xmm0
@@ -207,7 +207,7 @@ ASM_convertYUVtoRGB_loopUnrolling:
 		insertps xmm8, xmm9, 11100000b
 		;CONSEGUIMOS R3:
 		movdqu xmm9, xmm4;		xmm9 = a|v|u|y
-		movdqu xmm10, xmm7
+		movdqu xmm10, xmm5
 		call .convertirRGB
 		;tomo el valor obtenido y lo pego en xmm8:
 		insertps xmm8, xmm9, 11110000b
@@ -310,7 +310,7 @@ ASM_convertYUVtoRGB_loopUnrolling:
 		insertps xmm8, xmm9, 11100000b
 		;CONSEGUIMOS R3:
 		movdqu xmm9, xmm15;		xmm9 = a|v|u|y
-		movdqu xmm12, xmm7
+		movdqu xmm12, xmm5
 		call .convertirRGB
 		;tomo el valor obtenido y lo pego en xmm8:
 		insertps xmm8, xmm9, 11110000b
@@ -334,18 +334,18 @@ ASM_convertYUVtoRGB_loopUnrolling:
 		;===============
 		;lo pego en dst:
 		;===============
-		movq [r15], xmm1
-		movq [r15 + 8], xmm12
+		movdqu [r15], xmm1
+		movdqu [r15 + 16], xmm12
 
 
 
 	;ya procese 16 componentes de pixel mas:
-	sub r12, 16
+	sub r12, 32
 	cmp r12, 0
 	je .fin
 	;avanzo en la imagen src y dst:
-	lea rbx, [rbx + 16]
-	lea r15, [r15 + 16]
+	lea rbx, [rbx + 32]
+	lea r15, [r15 + 32]
 	jmp .avanzar
 
 	.fin:
@@ -433,7 +433,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 	.avanzar:
 	;hago el acceso memoria consecutivamente:
 	movdqu xmm0, [rbx];		xmm0 = a0|v0|u0|y0|a1|v1|u1|y1|a2|v2|u2|y2|a3|v3|u3|y3
-	movdqu xmm15, [rbx + 8];	xmm8 = a4|v4|u4|y4|a5|v5|u5|y5|a6|v6|u6|y6|a7|v7|u7|y7
+	movdqu xmm11, [rbx + 16];	xmm8 = a4|v4|u4|y4|a5|v5|u5|y5|a6|v6|u6|y6|a7|v7|u7|y7
 	
 	;copio xmm0 para desempaquetar luego, y hago su mascara
 	movdqu xmm1, xmm0
@@ -456,23 +456,27 @@ ASM_convertRGBtoYUV_loopUnrolling:
 	punpcklwd xmm3, xmm10;	xmm3 = a2|v2|u2|y2
 	punpckhwd xmm4, xmm10;	xmm4 = a3|v3|u3|y3
 
-	;hago lo mismo de arriba pero para xmm15:
-	movdqu xmm12, xmm15
-	movdqu xmm14, xmm15
+
+	;copio xmm0 para desempaquetar luego, y hago su mascara
+	movdqu xmm12, xmm11
+	movdqu xmm14, xmm11
 	xorps xmm10, xmm10
 
-	punpcklbw xmm12, xmm10
-	punpckhbw xmm14, xmm10
+	;desempaqueto xmm0 de byte a word:
+	punpcklbw xmm12, xmm10;	xmm1 = a0|0|v0|0|u0|0|y0|0|a1|0|v1|0|u1|0|y1|0
+	punpckhbw xmm14, xmm10;	xmm2 = a2|0|v2|0|u2|0|y2|0|a3|0|v3|0|u3|0|y3|0
 	
+	;desempaqueto xmm1 de word a double word:
 	xorps xmm10, xmm10
 	movdqu xmm13, xmm12
-	punpcklwd xmm12, xmm10
-	punpckhwd xmm13, xmm10
+	punpcklwd xmm12, xmm10;	xmm1 = a0|v0|u0|y0
+	punpckhwd xmm13, xmm10;	xmm2 = a1|v1|u1|y1
 
+	;desempaqueto xmm3 de word a double word:
 	xorps xmm10, xmm10
-	movdqu xmm15, xmm13
-	punpcklwd xmm13, xmm10
-	punpckhwd xmm15, xmm10
+	movdqu xmm15, xmm14
+	punpcklwd xmm14, xmm10;	xmm3 = a2|v2|u2|y2
+	punpckhwd xmm15, xmm10;	xmm4 = a3|v3|u3|y3
 
 
 	;**===========**
@@ -593,7 +597,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 		insertps xmm8, xmm9, 11100000b
 		;CONSEGUIMOS Y3:
 		movdqu xmm9, xmm4
-		movdqu xmm10, xmm7
+		movdqu xmm10, xmm5
 		mov r8d, 128
 		mov r9d, 16
 		call .convertirYUV	
@@ -608,7 +612,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 	;**===========**
 		;CONSEGUIMOS V0:
 		movdqu xmm9, xmm12
-		movdqu xmm12, xmm7
+		movdqu xmm10, xmm7
 		mov r8, 128
 		mov r9, 128
 		call .convertirYUV
@@ -617,7 +621,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 		insertps xmm8, xmm9, 11010000b
 		;CONSEGUIMOS U0:
 		movdqu xmm9, xmm12
-		movdqu xmm12, xmm6
+		movdqu xmm10, xmm6
 		mov r8d, 128
 		mov r9d, 128
 		call .convertirYUV
@@ -625,7 +629,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 		insertps xmm8, xmm9, 11100000b
 		;CONSEGUIMOS Y0:
 		movdqu xmm9, xmm12
-		movdqu xmm12, xmm5
+		movdqu xmm10, xmm5
 		mov r8d, 128
 		mov r9d, 16
 		call .convertirYUV
@@ -640,7 +644,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 	;**===========**
 		;CONSEGUIMOS V1:
 		movdqu xmm9, xmm13
-		movdqu xmm12, xmm7
+		movdqu xmm10, xmm7
 		mov r9d, 128
 		mov r8d, 128
 		call .convertirYUV		
@@ -649,7 +653,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 		insertps xmm8, xmm9, 11010000b
 		;CONSEGUIMOS U1:
 		movdqu xmm9, xmm13
-		movdqu xmm12, xmm6
+		movdqu xmm10, xmm6
 		mov r8d, 128
 		mov r9d, 128
 		call .convertirYUV
@@ -657,7 +661,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 		insertps xmm8, xmm9, 11100000b
 		;CONSEGUIMOS Y1:
 		movdqu xmm9, xmm13
-		movdqu xmm12, xmm5
+		movdqu xmm10, xmm5
 		mov r8d, 128
 		mov r9d, 16
 		call .convertirYUV
@@ -672,7 +676,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 	;**===========**
 		;CONSEGUIMOS V2:
 		movdqu xmm9, xmm14
-		movdqu xmm12, xmm7
+		movdqu xmm10, xmm7
 		mov r8d, 128
 		mov r9d, 128
 		call .convertirYUV		
@@ -681,7 +685,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 		insertps xmm8, xmm9, 11010000b
 		;CONSEGUIMOS U2:
 		movdqu xmm9, xmm14
-		movdqu xmm12, xmm6
+		movdqu xmm10, xmm6
 		mov r8d, 128
 		mov r9d, 128
 		call .convertirYUV
@@ -689,7 +693,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 		insertps xmm8, xmm9, 11100000b
 		;CONSEGUIMOS Y2:
 		movdqu xmm9, xmm14
-		movdqu xmm12, xmm5
+		movdqu xmm10, xmm5
 		mov r8d, 128
 		mov r9d, 16
 		call .convertirYUV	
@@ -704,7 +708,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 	;**===========**
 		;CONSEGUIMOS V3:
 		movdqu xmm9, xmm15
-		movdqu xmm12, xmm7
+		movdqu xmm10, xmm7
 		mov r8d, 128
 		mov r9d, 128
 		call .convertirYUV
@@ -713,7 +717,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 		insertps xmm8, xmm9, 11010000b
 		;CONSEGUIMOS U3:
 		movdqu xmm9, xmm15
-		movdqu xmm12, xmm6
+		movdqu xmm10, xmm6
 		mov r8d, 128
 		mov r9d, 128
 		call .convertirYUV	
@@ -721,7 +725,7 @@ ASM_convertRGBtoYUV_loopUnrolling:
 		insertps xmm8, xmm9, 11100000b
 		;CONSEGUIMOS Y3:
 		movdqu xmm9, xmm15
-		movdqu xmm12, xmm7
+		movdqu xmm10, xmm5
 		mov r8d, 128
 		mov r9d, 16
 		call .convertirYUV	
@@ -747,18 +751,18 @@ ASM_convertRGBtoYUV_loopUnrolling:
 		;===============
 		;lo pego en dst:
 		;===============
-		movq [r15], xmm1
-		movq [r15 + 8], xmm12
+		movdqu [r15], xmm1
+		movdqu [r15 + 16], xmm12
 
 
 
 	;ya procese 16 componentes de pixel mas:
-	sub r12, 16
+	sub r12, 32
 	cmp r12, 0
 	je .fin
 	;avanzo en la imagen src y dst:
-	lea rbx, [rbx + 16]
-	lea r15, [r15 + 16]
+	lea rbx, [rbx + 32]
+	lea r15, [r15 + 32]
 	jmp .avanzar
 
 	.fin:
