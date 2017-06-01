@@ -56,6 +56,7 @@ cmp rcx,0
 jl .fin
 push rcx; guardamos el indice de filas (0 <= rcx = i <= srch)
 mov rcx,r13; rcx <-- cantidad de columnas (j = srcw)
+dec rcx
 
   .ciclo_columnas:
   ; el pixel que tenemos que darle a ASM_kernelValues = src + 4*i*srcw +  4*j - offset_primero_Kernel
