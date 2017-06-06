@@ -75,27 +75,25 @@ void C_convertYUVtoRGB(uint8_t* src, uint32_t srcw, uint32_t srch,
 	RGBA ( * matrix_dst)[dstw] = (RGBA( * )[dstw])dst;
 	//matrix_src[fila][columna]
 
-	for (unsigned int i = 0; i < srcw; ++i)	{
+	/*for (unsigned int i = 0; i < srcw; ++i)	{
 		for (unsigned int j = 0; j < srch; ++j) {
 			matrix_dst[i][j].r = saturate(convertToR(matrix_src[i][j].y, matrix_src[i][j].u, matrix_src[i][j].v));
 			matrix_dst[i][j].g = saturate(convertToG(matrix_src[i][j].y, matrix_src[i][j].u, matrix_src[i][j].v));
 			matrix_dst[i][j].b = saturate(convertToB(matrix_src[i][j].y, matrix_src[i][j].u, matrix_src[i][j].v));
 			matrix_dst[i][j].a = matrix_src[i][j].a;
 		}
-	}
-/*
+	}*/
 	unsigned int i = 0;
 	while(i < 4*srcw*srch) {
-		int32_t V = src[i+1];
-		int32_t U = src[i+2];
-		int32_t Y = src[i+3];
+		int32_t B = src[i+1];
+		int32_t G = src[i+2];
+		int32_t R = src[i+3];
 
-		dst[i+1] = convertToB(Y,U,V);
-		dst[i+2] = convertToG(Y,U,V);
-		dst[i+3] = convertToR(Y,U,V);
 		dst[i] = src[i];
+		dst[i+1] = saturate(convertToB(R,G,B));
+		dst[i+2] = saturate(convertToG(R,G,B));
+		dst[i+3] = saturate(convertToR(R,G,B));
 
 		i = i + 4;
 	}
-*/
 }
