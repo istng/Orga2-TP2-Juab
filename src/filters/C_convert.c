@@ -53,20 +53,6 @@ int32_t convertToB(int32_t Y, int32_t U, int32_t V __attribute__((unused))) {
 void C_convertRGBtoYUV(uint8_t* src, uint32_t srcw, uint32_t srch,
                        uint8_t* dst, uint32_t dstw __attribute__((unused)), uint32_t dsth __attribute__((unused))) {
 
-	/*unsigned int i = 0;
-	while(i < 4*srcw*srch) {
-		int32_t B = src[i+1];
-		int32_t G = src[i+2];
-		int32_t R = src[i+3];
-
-		dst[i] = src[i];
-		dst[i+1] = saturate(convertToV(R,G,B));
-		dst[i+2] = saturate(convertToU(R,G,B));
-		dst[i+3] = saturate(convertToY(R,G,B));
-
-		i = i + 4;
-	}*/
-
 	RGBA ( * matrix_src)[srcw] = (RGBA( * )[srcw])src;
 	YUVA ( * matrix_dst)[dstw] = (YUVA( * )[dstw])dst;
 	//matrix_src[fila][columna]
@@ -86,16 +72,7 @@ void C_convertYUVtoRGB(uint8_t* src, uint32_t srcw, uint32_t srch,
 
 	YUVA ( * matrix_src)[srcw] = (YUVA( * )[srcw])src;
 	RGBA ( * matrix_dst)[dstw] = (RGBA( * )[dstw])dst;
-	//matrix_src[fila][columna]
 
-	/*for (unsigned int i = 0; i < srcw; ++i)	{
-		for (unsigned int j = 0; j < srch; ++j) {
-			matrix_dst[i][j].r = saturate(convertToR(matrix_src[i][j].y, matrix_src[i][j].u, matrix_src[i][j].v));
-			matrix_dst[i][j].g = saturate(convertToG(matrix_src[i][j].y, matrix_src[i][j].u, matrix_src[i][j].v));
-			matrix_dst[i][j].b = saturate(convertToB(matrix_src[i][j].y, matrix_src[i][j].u, matrix_src[i][j].v));
-			matrix_dst[i][j].a = matrix_src[i][j].a;
-		}
-	}*/
 	unsigned int i = 0;
 	while(i < 4*srcw*srch) {
 		int32_t B = src[i+1];
