@@ -73,9 +73,9 @@ void C_convertRGBtoYUV(uint8_t* src, uint32_t srcw, uint32_t srch,
 
 	for (unsigned int i = 0; i < srcw; ++i)	{
 		for (unsigned int j = 0; j < srch; ++j) {
-			matrix_dst[i][j].y = saturate(convertToY(matrix_src[i][j].y, matrix_src[i][j].u, matrix_src[i][j].v));
-			matrix_dst[i][j].u = saturate(convertToU(matrix_src[i][j].y, matrix_src[i][j].u, matrix_src[i][j].v));
-			matrix_dst[i][j].v = saturate(convertToV(matrix_src[i][j].y, matrix_src[i][j].u, matrix_src[i][j].v));
+			matrix_dst[i][j].y = saturate(convertToY(matrix_src[i][j].r, matrix_src[i][j].g, matrix_src[i][j].b));
+			matrix_dst[i][j].u = saturate(convertToU(matrix_src[i][j].r, matrix_src[i][j].g, matrix_src[i][j].b));
+			matrix_dst[i][j].v = saturate(convertToV(matrix_src[i][j].r, matrix_src[i][j].g, matrix_src[i][j].b));
 			matrix_dst[i][j].a = matrix_src[i][j].a;
 		}
 	}
